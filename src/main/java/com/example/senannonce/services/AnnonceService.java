@@ -20,7 +20,7 @@ public class AnnonceService {
       annonce.setDescription(description);
       annonce.setPrix(prix);
       annonce.setVille(ville);
-      annonce.setStatut(statut);
+      annonce.setStatut("EN_ATTENTE");
       return annonceRepository.save(annonce);
 
     }
@@ -34,5 +34,15 @@ public class AnnonceService {
     public Annonce getAnnonceById(Long id){
         Optional<Annonce> annonce = annonceRepository.findById(id);
         return annonce.orElse(null);
+    }
+
+    // Modification de statut
+    public Annonce changeStatut( Long id, String statut){
+        Annonce annonce = annonceRepository.findById(id).orElse(null);
+        if (annonce != null){
+            annonce.setStatut(statut);
+            return annonceRepository.save(annonce);
+        }
+        return null;
     }
 }

@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/annonce")
+@RequestMapping("/annonces")
 public class AnnonceController {
 
     @Autowired
     private AnnonceService annonceService;
 
-    @PostMapping("/create")
+    @PostMapping
     public Annonce createAnnonce(
             @RequestParam String titre,
             @RequestParam String description,
@@ -26,14 +26,24 @@ public class AnnonceController {
         return annonceService.createAnnonce(titre, description, prix, ville, statut);
     }
 
-    @GetMapping("/list")
+    // Lister les annonces
+    @GetMapping
     public List<Annonce> getAnnonces(){
         return annonceService.getAllAnnonce();
     }
 
+    // Detail annonce
     @GetMapping("/{id}")
     public Annonce getAnnonceById(@PathVariable Long id){
         return annonceService.getAnnonceById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Annonce updateAnnonce(
+            @RequestParam Long id,
+            @RequestParam String statut
+    ){
+        return annonceService.changeStatut(id, statut);
     }
 
 }
