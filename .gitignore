@@ -1,0 +1,26 @@
+# Backend
+**/target/
+**/.mvn/
+**/mvnw
+**/mvnw.cmd
+**/application.properties
+
+# interface
+**/node_modules/
+**/.angular/
+**/dist/
+**/tmp/
+
+# Moderation-service
+**/node_modules/
+**/.env
+**/package-lock.json
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
