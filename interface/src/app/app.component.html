@@ -1,0 +1,83 @@
+<!-- Navbar moderne -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">
+      <i class="fas fa-tags me-2"></i>
+      SenAnnonces
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/annonces" >
+            <i class="fas fa-list me-1"></i> Annonces
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn-publish" routerLink="/nouvelle" >
+            <i class="fas fa-plus-circle me-1"></i> Publier
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/moderation" >
+            <i class="fas fa-shield-alt me-1"></i> Modération
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section (visible uniquement sur la page d'accueil) -->
+<div class="hero-section" *ngIf="showHero">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="hero-title animate-fade-in">
+          Bienvenue sur <span class="highlight">SenAnnonces</span>
+        </h1>
+        <p class="hero-subtitle animate-fade-in-up">
+          La plateforme de petites annonces la plus fiable du Sénégal
+        </p>
+        <div class="hero-buttons animate-fade-in-up">
+          <a routerLink="/nouvelle" class="btn btn-primary btn-lg me-3">
+            <i class="fas fa-plus-circle me-2"></i>Publier une annonce
+          </a>
+          <a routerLink="/annonces" class="btn btn-outline-light btn-lg">
+            <i class="fas fa-search me-2"></i>Parcourir
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contenu principal -->
+<main [ngClass]="{'main-content': true, 'with-hero': showHero}">
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 text-center text-md-start">
+        <h6><i class="fas fa-tags me-2"></i>SenAnnonces</h6>
+        <small>Votre plateforme de confiance</small>
+      </div>
+      <div class="col-md-4 text-center">
+        <small>© 2025 SenAnnonces - Tous droits réservés</small>
+      </div>
+      <div class="col-md-4 text-center text-md-end">
+        <small>Made with <i class="fas fa-heart text-danger"></i> au Sénégal</small>
+      </div>
+    </div>
+  </div>
+</footer> 
