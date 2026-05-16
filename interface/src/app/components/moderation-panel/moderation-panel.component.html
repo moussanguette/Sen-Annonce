@@ -1,0 +1,78 @@
+<div class="container mt-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="display-6">
+        <i class="fas fa-shield-alt me-3" style="color: #ff6b35;"></i>
+        Modération des annonces
+      </h2>
+      <p class="text-muted">Approuvez ou rejetez les annonces en attente de validation</p>
+      <hr>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="annonces.length === 0">
+    <div class="col-12 text-center py-5">
+      <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+      <h4>Aucune annonce en attente</h4>
+      <p class="text-muted">Toutes les annonces ont été modérées</p>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="annonces.length > 0">
+    <div class="col-12">
+      <div class="table-responsive">
+        <table class="table moderation-table">
+          <thead>
+            <tr>
+              <th><i class="fas fa-hashtag me-1"></i> ID</th>
+              <th><i class="fas fa-tag me-1"></i> Titre</th>
+              <th><i class="fas fa-align-left me-1"></i> Description</th>
+              <th><i class="fas fa-money-bill me-1"></i> Prix (FCFA)</th>
+              <th><i class="fas fa-city me-1"></i> Ville</th>
+              <th><i class="fas fa-chart-line me-1"></i> Statut</th>
+              <th><i class="fas fa-cogs me-1"></i> Actions</th>
+             </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of annonces">
+              <td><strong>#{{ a.id }}</strong></td>
+              <td><strong>{{ a.titre }}</strong></td>
+              <td>{{ a.description | slice:0:80 }}{{ a.description.length > 80 ? '...' : '' }}</td>
+              <td>{{ a.prix | number:'1.0-0' }} FCFA</td>
+              <td><i class="fas fa-map-marker-alt text-danger me-1"></i>{{ a.ville }}</td>
+              <td>
+                <span class="badge-status badge-warning" *ngIf="a.statut === 'EN_ATTENTE'">
+                  <i class="fas fa-clock me-1"></i>EN ATTENTE
+                </span>
+                <span class="badge-status badge-success" *ngIf="a.statut === 'APPROUVEE'">
+                  <i class="fas fa-check me-1"></i>APPROUVÉE
+                </span>
+                <span class="badge-status badge-danger" *ngIf="a.statut === 'REJETEE'">
+                  <i class="fas fa-times me-1"></i>REJETÉE
+                </span>
+                <span class="badge-status badge-info" *ngIf="a.statut === 'PUBLIEE'">
+                  <i class="fas fa-globe me-1"></i>PUBLIÉE
+                </span>
+              </td>
+              <td>
+                <button *ngIf="a.statut === 'EN_ATTENTE'" 
+                        (click)="approve(a.id!)" 
+                        class="btn-moderation btn-approve">
+                  <i class="fas fa-check-circle me-1"></i> Approuver
+                </button>
+                <button *ngIf="a.statut === 'EN_ATTENTE'" 
+                        (click)="reject(a.id!)" 
+                        class="btn-moderation btn-reject ms-2">
+                  <i class="fas fa-times-circle me-1"></i> Rejeter
+                </button>
+                <span *ngIf="a.statut !== 'EN_ATTENTE'" class="text-muted">
+                  <i class="fas fa-check-double me-1"></i> Traité
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

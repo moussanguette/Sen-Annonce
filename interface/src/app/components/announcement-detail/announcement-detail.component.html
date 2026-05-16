@@ -1,0 +1,48 @@
+<div class="container mt-4" *ngIf="annonce">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header bg-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">{{ annonce.titre }}</h2>
+            <span class="badge" [ngClass]="{
+              'bg-warning': annonce.statut === 'EN_ATTENTE',
+              'bg-success': annonce.statut === 'PUBLIEE',
+              'bg-danger': annonce.statut === 'REJETEE'
+            }">{{ annonce.statut }}</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <h6 class="text-muted">Description</h6>
+            <p>{{ annonce.description }}</p>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <h6 class="text-muted">Prix</h6>
+              <h3 class="text-primary">{{ annonce.prix | number:'1.0-0' }} FCFA</h3>
+            </div>
+            <div class="col-md-6 mb-3">
+              <h6 class="text-muted">Localisation</h6>
+              <p><i class="fas fa-map-marker-alt text-danger me-2"></i>{{ annonce.ville }}</p>
+            </div>
+          </div>
+          
+          <hr>
+          
+          <div class="d-flex justify-content-between">
+            <a routerLink="/annonces" class="btn btn-secondary">
+              <i class="fas fa-arrow-left me-2"></i>Retour
+            </a>
+            <button *ngIf="annonce.statut === 'EN_ATTENTE'" 
+                    (click)="soumettre(annonce.id!)" 
+                    class="btn btn-primary">
+              <i class="fas fa-paper-plane me-2"></i>Soumettre à modération
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

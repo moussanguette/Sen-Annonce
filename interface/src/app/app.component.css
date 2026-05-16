@@ -1,0 +1,409 @@
+   /* ========== VARIABLES GLOBALES ========== */
+:root {
+  --primary-color: #ff6b35;
+  --primary-dark: #e55a2b;
+  --primary-light: #ff8c5a;
+  --dark-bg: #1a1a2e;
+  --dark-secondary: #16213e;
+  --light-bg: #f8f9fa;
+  --gray-bg: #f5f5f5;
+  --success: #27ae60;
+  --danger: #e74c3c;
+  --warning: #f39c12;
+  --info: #3498db;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 15px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
+  --transition: all 0.3s ease;
+}
+
+/* ========== NAVBAR - VERSION  ========== */
+.navbar {
+  background: #1a1a2e !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 1rem 0;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white !important;
+  text-decoration: none;
+}
+
+.navbar-brand i {
+  color: #ff6b35;
+}
+
+/* Liens normaux - TOUJOURS blancs */
+.nav-link {
+  color: white !important;
+  font-weight: 500;
+  margin: 0 0.3rem;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+/* AUCUN CHANGEMENT de couleur au clic, focus ou actif */
+.nav-link:hover {
+  color: #ff6b35 !important;
+  background: rgba(255, 107, 53, 0.1);
+  transform: translateY(-2px);
+}
+
+.nav-link:active,
+.nav-link:focus,
+.nav-link.active,
+.nav-link:visited {
+  color: white !important;
+  background: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Bouton Publier - garde son style dégradé */
+.nav-link.btn-publish {
+  background: linear-gradient(135deg, #ff6b35, #e55a2b) !important;
+  color: white !important;
+  border-radius: 25px;
+}
+
+.nav-link.btn-publish:hover {
+  background: linear-gradient(135deg, #e55a2b, #d44a1a) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+}
+
+.nav-link.btn-publish:active,
+.nav-link.btn-publish:focus,
+.nav-link.btn-publish.active {
+  background: linear-gradient(135deg, #ff6b35, #e55a2b) !important;
+  color: white !important;
+  transform: none !important;
+}
+
+/* Version responsive mobile */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.5rem 0;
+  }
+  
+  .nav-link {
+    text-align: center;
+    margin: 0.2rem 0;
+  }
+  
+  .nav-link.btn-publish {
+    margin-top: 0.5rem;
+  }
+}
+
+/* ========== HERO SECTION ========== */
+.hero-section {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #1a1a2e;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 80px 0;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title .highlight {
+  color: var(--primary-color);
+  position: relative;
+}
+
+.hero-title .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), transparent);
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.95);
+  margin-bottom: 2rem;
+}
+
+.hero-buttons .btn-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  transition: var(--transition);
+}
+
+.hero-buttons .btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255,107,53,0.4);
+}
+
+.hero-buttons .btn-outline-light {
+  border: 2px solid white;
+  padding: 12px 30px;
+  border-radius: 50px;
+  transition: var(--transition);
+}
+
+.hero-buttons .btn-outline-light:hover {
+  background: white;
+  color: var(--primary-color);
+  transform: translateY(-3px);
+}
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+  min-height: calc(100vh - 70px);
+  padding: 40px 0;
+  margin-top: 30px; 
+  background: var(--light-bg);
+}
+
+.main-content.with-hero {
+  background: var(--light-bg);
+  padding: 60px 0;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  background: #1a1a2e;
+  color: rgba(255,255,255,0.8);
+  padding: 2rem 0;
+  margin-top: auto;
+}
+
+.footer h6 {
+  color: white !important;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  
+}
+
+.footer small {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* ========== CARTES ========== */
+.card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  overflow: hidden;
+  margin-bottom: 25px;
+  background: white;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--dark-bg);
+  margin-bottom: 1rem;
+}
+
+/* ========== TABLEAU DE MODÉRATION ========== */
+.moderation-table {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.moderation-table thead {
+  background: linear-gradient(135deg, var(--dark-bg), var(--dark-secondary));
+  color: white;
+}
+
+.moderation-table thead th {
+  padding: 15px;
+  font-weight: 600;
+  border: none;
+}
+
+.moderation-table tbody tr {
+  transition: var(--transition);
+  border-bottom: 1px solid #eee;
+}
+
+.moderation-table tbody tr:hover {
+  background: #fef5f0;
+  transform: scale(1.01);
+}
+
+.moderation-table tbody td {
+  padding: 15px;
+  vertical-align: middle;
+}
+
+.btn-moderation {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin: 0 3px;
+  transition: var(--transition);
+}
+
+.btn-approve {
+  background: linear-gradient(135deg, var(--success), #219a52);
+  border: none;
+  color: white;
+}
+
+.btn-approve:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39,174,96,0.4);
+}
+
+.btn-reject {
+  background: linear-gradient(135deg, var(--danger), #c0392b);
+  border: none;
+  color: white;
+}
+
+.btn-reject:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231,76,60,0.4);
+}
+
+/* Badges de statut */
+.badge-status {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge-danger {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.badge-info {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+/* ========== FORMULAIRES ========== */
+.form-container {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.form-control, .form-select {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  transition: var(--transition);
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(255,107,53,0.25);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .hero-title { font-size: 2rem; }
+  .hero-subtitle { font-size: 1rem; }
+  .hero-buttons .btn { display: block; width: 100%; margin: 0.5rem 0 !important; }
+  .main-content { padding: 20px 0; }
+  .form-container { padding: 1.5rem; }
+  .moderation-table { font-size: 0.85rem; }
+  .moderation-table thead th, .moderation-table tbody td { padding: 10px; }
+  .btn-moderation { padding: 4px 12px; font-size: 0.75rem; }
+}
+
+
+/* FORCER la couleur des liens - priorité maximale */
+.navbar .nav-link,
+.navbar .nav-link:active,
+.navbar .nav-link:focus,
+.navbar .nav-link.ng-star-inserted,
+.navbar .nav-link[class*="active"] {
+  color: rgba(255, 255, 255, 0.85) !important;
+  background: transparent !important;
+  border-bottom: none !important;
+}
+
+/* Le bouton publier garde son style */
+.navbar .nav-link.btn-publish,
+.navbar .nav-link.btn-publish:active,
+.navbar .nav-link.btn-publish:focus {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+  color: white !important;
+}
+
+

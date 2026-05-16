@@ -1,0 +1,57 @@
+<div class="container mt-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2>
+        <i class="fas fa-list me-3" style="color: #ff6b35;"></i>
+        Liste des annonces
+      </h2>
+      <p class="text-muted">Découvrez toutes les annonces publiées</p>
+      <hr>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="annonces.length === 0">
+    <div class="col-12 text-center py-5">
+      <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
+      <h4>Aucune annonce</h4>
+      <p class="text-muted">Soyez le premier à publier une annonce !</p>
+      <a routerLink="/nouvelle" class="btn btn-primary mt-3">
+        <i class="fas fa-plus-circle me-2"></i>Publier une annonce
+      </a>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="annonces.length > 0">
+    <div class="col-md-4" *ngFor="let annonce of annonces">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="card-title mb-0">{{ annonce.titre }}</h5>
+            <span class="badge" [ngClass]="{
+              'bg-warning': annonce.statut === 'EN_ATTENTE',
+              'bg-success': annonce.statut === 'PUBLIEE',
+              'bg-danger': annonce.statut === 'REJETEE'
+            }">{{ annonce.statut }}</span>
+          </div>
+          <p class="card-text text-muted small">
+            <i class="fas fa-map-marker-alt me-1"></i>{{ annonce.ville }}
+          </p>
+          <p class="card-text">{{ annonce.description | slice:0:100 }}...</p>
+          <p class="card-text h5 text-primary">
+            {{ annonce.prix | number:'1.0-0' }} FCFA
+          </p>
+          <div class="mt-3">
+            <a [routerLink]="['/annonces', annonce.id]" class="btn btn-sm btn-info me-2">
+              <i class="fas fa-eye me-1"></i>Détail
+            </a>
+            <button *ngIf="annonce.statut === 'EN_ATTENTE'" 
+                    (click)="soumettre(annonce.id!)" 
+                    class="btn btn-sm btn-primary">
+              <i class="fas fa-paper-plane me-1"></i>Soumettre
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
