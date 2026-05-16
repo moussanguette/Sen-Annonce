@@ -35,6 +35,21 @@ export class AnnouncementDetailComponent implements OnInit {
     }
   }
 
+  delete(id: number) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')) {
+      this.annonceService.delete(id).subscribe({
+        next: () => {
+          alert('Annonce supprimée avec succès');
+          this.router.navigate(['/annonces']);
+        },
+        error: (err) => {
+          console.error('Erreur lors de la suppression:', err);
+          alert('Erreur lors de la suppression');
+        }
+      });
+    }
+  }
+
   soumettre(id: number) {
     if (confirm('Soumettre cette annonce à la modération ?')) {
       this.annonceService.soumettre(id).subscribe({

@@ -34,13 +34,14 @@ public class AnnonceService {
 
     public List<Annonce> findAllAdvanced(String q, Pageable pageable) {
         Specification<Annonce> spec = (root, query, cb) -> {
+            Predicate notDeleted = cb.isNull(root.get("deletedAt"));
             if (q == null || q.isEmpty()) {
-                return cb.conjunction();
+                return notDeleted;
             }
             String pattern = "%" + q.toLowerCase() + "%";
             Predicate titleMatch = cb.like(cb.lower(root.get("titre")), pattern);
             Predicate descMatch = cb.like(cb.lower(root.get("description")), pattern);
-            return cb.or(titleMatch, descMatch);
+            return cb.and(notDeleted, cb.or(titleMatch, descMatch));
         };
         return annonceRepository.findAll(spec, pageable).getContent();
     }
@@ -50,14 +51,24 @@ public class AnnonceService {
     }
 
     public Annonce findById(Long id) {
-        return annonceRepository.findById(id)
+        Annonce annonce = annonceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Annonce non trouvée avec l'id: " + id));
+        if (annonce.getDeletedAt() != null) {
+            throw new RuntimeException("Annonce supprimée");
+        }
+        return annonce;
     }
 
     public Annonce updateStatut(Long id, String statut) {
         Annonce annonce = findById(id);
         annonce.setStatut(statut);
         return annonceRepository.save(annonce);
+    }
+
+    public void deleteAnnonce(Long id) {
+        Annonce annonce = findById(id);
+        annonce.setDeletedAt(java.time.LocalDateTime.now());
+        annonceRepository.save(annonce);
     }
 
     public void soumettrePourModeration(Long id) {

@@ -25,21 +25,21 @@ public class AnnonceValidationTest {
 
     @Test
     void whenFieldsAreValid_thenNoViolations() {
-        Annonce annonce = new Annonce(null, "iPhone 15", "Vente superbe iPhone", 500000, "Dakar", "EN_ATTENTE");
+        Annonce annonce = new Annonce(null, "iPhone 15", "Vente superbe iPhone", 500000, "Dakar", "EN_ATTENTE", null, null, null);
         Set<ConstraintViolation<Annonce>> violations = validator.validate(annonce);
         assertTrue(violations.isEmpty(), "Il ne devrait y avoir aucune violation");
     }
 
     @Test
     void whenTitreIsBlank_thenViolation() {
-        Annonce annonce = new Annonce(null, "", "Description", 100, "Dakar", "EN_ATTENTE");
+        Annonce annonce = new Annonce(null, "", "Description", 100, "Dakar", "EN_ATTENTE", null, null, null);
         Set<ConstraintViolation<Annonce>> violations = validator.validate(annonce);
         assertFalse(violations.isEmpty(), "Le titre vide devrait causer une violation");
     }
 
     @Test
     void whenPrixIsNegative_thenViolation() {
-        Annonce annonce = new Annonce(null, "Titre", "Description", -10, "Dakar", "EN_ATTENTE");
+        Annonce annonce = new Annonce(null, "Titre", "Description", -10, "Dakar", "EN_ATTENTE", null, null, null);
         Set<ConstraintViolation<Annonce>> violations = validator.validate(annonce);
         assertFalse(violations.isEmpty(), "Un prix négatif devrait causer une violation");
     }

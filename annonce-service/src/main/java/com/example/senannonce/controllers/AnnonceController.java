@@ -39,12 +39,12 @@ public class AnnonceController {
     @Operation(summary = "Lister toutes les annonces avec recherche, tri et pagination")
     public List<Annonce> getAll(
             @Parameter(description = "Recherche par nom/texte") @RequestParam(required = false) String q,
-            @Parameter(description = "Champ par lequel trier") @RequestParam(defaultValue = "id") String order_by,
-            @Parameter(description = "Direction du tri") @RequestParam(defaultValue = "asc") String order_dir,
+            @Parameter(description = "Champ par lequel trier") @RequestParam(defaultValue = "createdAt") String order_by,
+            @Parameter(description = "Direction du tri") @RequestParam(defaultValue = "desc") String order_dir,
             @Parameter(description = "Nombre limite") @RequestParam(defaultValue = "20") int limit,
             @Parameter(description = "Décalage pour la pagination") @RequestParam(defaultValue = "0") int offset
     ) {
-        Sort sort = order_dir.equalsIgnoreCase("desc") ? Sort.by(order_by).descending() : Sort.by(order_by).ascending();
+        Sort sort = order_dir.equalsIgnoreCase("asc") ? Sort.by(order_by).ascending() : Sort.by(order_by).descending();
         Pageable pageable = PageRequest.of(offset / limit, limit, sort);
         return annonceService.findAllAdvanced(q, pageable);
     }
@@ -84,5 +84,12 @@ public class AnnonceController {
     @Operation(summary = "Rejeter une annonce (passe au statut REJETEE)")
     public Annonce rejeter(@PathVariable Long id) {
         return annonceService.updateStatut(id, "REJETEE");
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Supprimer logiquement une annonce (soft delete)")
+    public ResponseEntity<Void> deleteAnnonce(@PathVariable Long id) {
+        annonceService.deleteAnnonce(id);
+        return ResponseEntity.noContent().build();
     }
 }

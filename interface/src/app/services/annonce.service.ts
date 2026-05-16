@@ -22,6 +22,10 @@ export class AnnonceService {
     return this.http.get<Announcement>(`${this.apiUrl}/annonces/${id}`);
   }
 
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/annonces/${id}`);
+  }
+
   soumettre(id: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/annonces/${id}/soumettre`, {});
   }
