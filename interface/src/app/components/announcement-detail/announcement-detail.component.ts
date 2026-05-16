@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Announcement } from '../../models/announcement.model';
 import { AnnonceService } from '../../services/annonce.service';
@@ -7,7 +7,6 @@ import { AnnonceService } from '../../services/annonce.service';
   selector: 'app-announcement-detail',
   templateUrl: './announcement-detail.component.html',
   standalone: false 
-  
 })
 export class AnnouncementDetailComponent implements OnInit {
   annonce?: Announcement;
@@ -15,7 +14,8 @@ export class AnnouncementDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private annonceService: AnnonceService
+    private annonceService: AnnonceService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -24,10 +24,11 @@ export class AnnouncementDetailComponent implements OnInit {
       this.annonceService.getById(id).subscribe({
         next: (data) => {
           this.annonce = data;
+          console.log('Annonce assignée:', this.annonce);
+          this.cdr.detectChanges(); // Force le rafraîchissement
         },
         error: (err) => {
-          console.error('Erreur lors du chargement:', err);
-          alert('Annonce non trouvée');
+          console.error('Erreur:', err);
           this.router.navigate(['/annonces']);
         }
       });
@@ -38,12 +39,8 @@ export class AnnouncementDetailComponent implements OnInit {
     if (confirm('Soumettre cette annonce à la modération ?')) {
       this.annonceService.soumettre(id).subscribe({
         next: () => {
-          alert('Annonce soumise à la modération avec succès');
+          alert('Annonce soumise');
           this.router.navigate(['/annonces']);
-        },
-        error: (err) => {
-          console.error('Erreur lors de la soumission:', err);
-          alert('Erreur lors de la soumission');
         }
       });
     }

@@ -5,7 +5,7 @@ spring.application.name=senAnnonce
 # MySQL Configuration - MODIFIER ICI
 spring.datasource.url=jdbc:mysql://localhost:3306/senAnnonceDB
 spring.datasource.username=root
-spring.datasource.password=VOTRE_MOT_DE_PASSE
+spring.datasource.password=
 
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 

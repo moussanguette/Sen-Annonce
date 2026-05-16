@@ -35,10 +35,35 @@ const swaggerOptions = {
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Configuration de l'URL du backend Spring Boot
-const ANNONCE_SERVICE_URL = process.env.ANNONCE_SERVICE_URL || 'http://localhost:8080/annonce';
+// Configuration de l'URL du backend Spring Boot (Pluriel: /annonces)
+const ANNONCE_SERVICE_URL = process.env.ANNONCE_SERVICE_URL || 'http://localhost:8080/annonces';
 
 // ========== ENDPOINTS DE MODÉRATION ==========
+
+/**
+ * @swagger
+ * /moderations/submit:
+ *   post:
+ *     summary: Recevoir une notification de soumission d'annonce
+ *     description: Endpoint appelé par annonce-service quand une annonce est soumise
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               annonceId:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Notification reçue
+ */
+app.post('/moderations/submit', (req, res) => {
+  const { annonceId } = req.body;
+  console.log(`[Moderation] Nouvelle annonce reçue pour modération: ID ${annonceId}`);
+  res.json({ message: 'Notification de modération reçue', annonceId });
+});
 
 /**
  * @swagger
@@ -56,21 +81,6 @@ const ANNONCE_SERVICE_URL = process.env.ANNONCE_SERVICE_URL || 'http://localhost
  *     responses:
  *       200:
  *         description: Annonce approuvée avec succès
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                 message:
- *                   type: string
- *                 annonceId:
- *                   type: integer
- *       404:
- *         description: Annonce non trouvée
- *       500:
- *         description: Erreur serveur
  */
 app.patch('/moderations/:id/approve', async (req, res) => {
   try {
@@ -86,8 +96,11 @@ app.patch('/moderations/:id/approve', async (req, res) => {
       });
     }
     
-    // Appeler le backend Spring Boot pour publier l'annonce
-    const response = await axios.patch(`${ANNONCE_SERVICE_URL}/${annonceId}/publier`);
+    // Appeler le backend Spring Boot pour approuver l'annonce
+    const response = await axios.patch(`${ANNONCE_SERVICE_URL}/${annonceId}/approuver`);
+    
+    // Optionnel: On pourrait aussi appeler /publier ici si on veut que ce soit automatique
+    await axios.patch(`${ANNONCE_SERVICE_URL}/${annonceId}/publier`);
     
     res.json({
       status: 'APPROUVEE',
@@ -99,19 +112,11 @@ app.patch('/moderations/:id/approve', async (req, res) => {
     console.error('Erreur lors de l\'approbation:', error.message);
     
     if (error.response) {
-      // Le serveur a répondu avec un code d'erreur
       res.status(error.response.status).json({
         error: 'Erreur du service d\'annonces',
         details: error.response.data
       });
-    } else if (error.request) {
-      // La requête a été faite mais pas de réponse
-      res.status(503).json({
-        error: 'Service d\'annonces indisponible',
-        details: 'Impossible de contacter le backend Spring Boot'
-      });
     } else {
-      // Autre erreur
       res.status(500).json({
         error: 'Erreur interne du service de modération',
         details: error.message
@@ -136,21 +141,6 @@ app.patch('/moderations/:id/approve', async (req, res) => {
  *     responses:
  *       200:
  *         description: Annonce rejetée avec succès
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                 message:
- *                   type: string
- *                 annonceId:
- *                   type: integer
- *       404:
- *         description: Annonce non trouvée
- *       500:
- *         description: Erreur serveur
  */
 app.patch('/moderations/:id/reject', async (req, res) => {
   try {
@@ -167,7 +157,6 @@ app.patch('/moderations/:id/reject', async (req, res) => {
     }
     
     // Appeler le backend Spring Boot pour changer le statut à REJETEE
-    // Note: Il faudra peut-être ajouter un endpoint /rejeter dans ton backend
     const response = await axios.patch(`${ANNONCE_SERVICE_URL}/${annonceId}/rejeter`);
     
     res.json({
@@ -184,11 +173,6 @@ app.patch('/moderations/:id/reject', async (req, res) => {
         error: 'Erreur du service d\'annonces',
         details: error.response.data
       });
-    } else if (error.request) {
-      res.status(503).json({
-        error: 'Service d\'annonces indisponible',
-        details: 'Impossible de contacter le backend Spring Boot'
-      });
     } else {
       res.status(500).json({
         error: 'Erreur interne du service de modération',
@@ -198,16 +182,6 @@ app.patch('/moderations/:id/reject', async (req, res) => {
   }
 });
 
-/**
- * @swagger
- * /moderations/health:
- *   get:
- *     summary: Vérifier la santé du service
- *     description: Endpoint pour vérifier que le service de modération fonctionne
- *     responses:
- *       200:
- *         description: Service opérationnel
- */
 app.get('/moderations/health', (req, res) => {
   res.json({
     status: 'OK',
@@ -217,7 +191,6 @@ app.get('/moderations/health', (req, res) => {
   });
 });
 
-// Middleware de gestion d'erreurs global
 app.use((err, req, res, next) => {
   console.error('Erreur non capturée:', err);
   res.status(500).json({
@@ -226,7 +199,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Démarrer le serveur
 app.listen(PORT, () => {
   console.log(`🚀 Service de modération démarré sur http://localhost:${PORT}`);
   console.log(`📚 Documentation Swagger disponible sur http://localhost:${PORT}/api-docs`);

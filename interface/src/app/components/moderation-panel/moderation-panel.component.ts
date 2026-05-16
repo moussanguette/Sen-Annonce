@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Announcement } from '../../models/announcement.model';
 import { AnnonceService } from '../../services/annonce.service';
 import { ModerationService } from '../../services/moderation.service';
@@ -10,10 +10,12 @@ import { ModerationService } from '../../services/moderation.service';
 })
 export class ModerationPanelComponent implements OnInit {
   annonces: Announcement[] = [];
+  loading = true;
 
   constructor(
     private annonceService: AnnonceService,
-    private moderationService: ModerationService
+    private moderationService: ModerationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -21,14 +23,20 @@ export class ModerationPanelComponent implements OnInit {
   }
 
   loadPending() {
+    this.loading = true;
     this.annonceService.getAll().subscribe({
       next: (data) => {
-        console.log('Toutes les annonces reçues:', data); // DEBUG
-        this.annonces = data.filter(a => a.statut === 'EN_ATTENTE');
-        console.log('Annonces en attente:', this.annonces); // DEBUG
+        console.log('Données brutes reçues:', data);
+        // On filtre de manière plus robuste (trim et uppercase)
+        this.annonces = data.filter(a => a.statut?.trim().toUpperCase() === 'EN_ATTENTE');
+        console.log('Annonces filtrées pour affichage:', this.annonces);
+        this.loading = false;
+        this.cdr.detectChanges(); // Force le rafraîchissement de l'interface
       },
       error: (err) => {
         console.error('Erreur lors du chargement:', err);
+        this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -36,11 +44,10 @@ export class ModerationPanelComponent implements OnInit {
   approve(id: number) {
     this.moderationService.approve(id).subscribe({
       next: () => {
-        alert('Annonce approuvée → publiée');
+        alert('Annonce approuvée');
         this.loadPending();
       },
       error: (err) => {
-        console.error('Erreur lors de l\'approbation:', err);
         alert('Erreur: ' + err.message);
       }
     });
@@ -53,7 +60,6 @@ export class ModerationPanelComponent implements OnInit {
         this.loadPending();
       },
       error: (err) => {
-        console.error('Erreur lors du rejet:', err);
         alert('Erreur: ' + err.message);
       }
     });
